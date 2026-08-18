@@ -27,7 +27,7 @@ export function ProfilePhoto({
       <img
         src={publicHref(profileImage.path)}
         alt={profileImage.alt}
-        width={1024}
+        width={819}
         height={1024}
         fetchPriority={priority ? "high" : "auto"}
         decoding="async"
