@@ -2,6 +2,7 @@ import { ImageResponse } from "next/og";
 import { profile } from "@/data/profile";
 import { siteMeta } from "@/data/site";
 
+export const dynamic = "force-static";
 export const alt = siteMeta.title;
 export const size = {
   width: 1200,
