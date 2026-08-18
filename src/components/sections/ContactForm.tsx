@@ -1,13 +1,13 @@
 "use client";
 
-import { useId, useState } from "react";
+import { useEffect, useId, useState } from "react";
 import { profile } from "@/data/profile";
+import { siteUrl } from "@/data/site";
 import {
   contactSchema,
   flattenContactErrors,
   type ContactFieldErrors,
 } from "@/lib/contact";
-import { sendContactMessage } from "@/lib/send-contact";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
 
@@ -26,11 +26,24 @@ const initialValues = {
   website: "",
 };
 
+const formSubmitAction = `https://formsubmit.co/${profile.email}`;
+const thankYouUrl = `${siteUrl}/?sent=1#contact`;
+
 export function ContactForm() {
   const formId = useId();
   const [values, setValues] = useState(initialValues);
   const [errors, setErrors] = useState<ContactFieldErrors>({});
   const [status, setStatus] = useState<Status>({ kind: "idle" });
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("sent") === "1") {
+      setStatus({
+        kind: "success",
+        message: "Thanks — I’ll get back to you.",
+      });
+    }
+  }, []);
 
   function fieldId(name: string) {
     return `${formId}-${name}`;
@@ -47,12 +60,10 @@ export function ContactForm() {
     }
   }
 
-  async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    setStatus({ kind: "submitting" });
-
+  function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     const parsed = contactSchema.safeParse(values);
     if (!parsed.success) {
+      event.preventDefault();
       setErrors(flattenContactErrors(parsed.error));
       setStatus({
         kind: "error",
@@ -61,37 +72,26 @@ export function ContactForm() {
       return;
     }
 
-    try {
-      const result = await sendContactMessage(parsed.data);
-
-      if (!result.ok) {
-        setStatus({ kind: "error", message: result.message });
-        return;
-      }
-
-      setValues(initialValues);
-      setErrors({});
-      setStatus({
-        kind: "success",
-        message: result.message,
-      });
-    } catch {
-      setStatus({
-        kind: "error",
-        message: `The message could not be sent. Please email ${profile.email} instead.`,
-      });
-    }
+    setStatus({ kind: "submitting" });
   }
 
   return (
     <form
-      onSubmit={onSubmit}
+      action={formSubmitAction}
+      method="POST"
       noValidate
+      onSubmit={onSubmit}
       className="relative rounded-2xl border border-border bg-background-card p-5 sm:p-6"
     >
+      <input type="hidden" name="_next" value={thankYouUrl} />
+      <input type="hidden" name="_subject" value="Portfolio contact" />
+      <input type="hidden" name="_template" value="table" />
+      <input type="hidden" name="_captcha" value="false" />
+
       <div className="grid gap-4 sm:grid-cols-2">
         <Field
           id={fieldId("name")}
+          name="name"
           errorId={errorId("name")}
           label="Name"
           autoComplete="name"
@@ -102,6 +102,7 @@ export function ContactForm() {
         />
         <Field
           id={fieldId("email")}
+          name="email"
           errorId={errorId("email")}
           label="Email"
           type="email"
@@ -116,6 +117,7 @@ export function ContactForm() {
       <div className="mt-4 grid gap-4 sm:grid-cols-2">
         <Field
           id={fieldId("company")}
+          name="company"
           errorId={errorId("company")}
           label="Company"
           autoComplete="organization"
@@ -125,6 +127,7 @@ export function ContactForm() {
         />
         <Field
           id={fieldId("subject")}
+          name="subject"
           errorId={errorId("subject")}
           label="Subject"
           required
@@ -168,7 +171,7 @@ export function ContactForm() {
         <label htmlFor={fieldId("website")}>Website</label>
         <input
           id={fieldId("website")}
-          name="website"
+          name="_honey"
           tabIndex={-1}
           autoComplete="off"
           value={values.website}
@@ -205,6 +208,7 @@ export function ContactForm() {
 
 type FieldProps = {
   id: string;
+  name: string;
   errorId: string;
   label: string;
   value: string;
@@ -217,6 +221,7 @@ type FieldProps = {
 
 function Field({
   id,
+  name,
   errorId,
   label,
   value,
@@ -234,7 +239,7 @@ function Field({
       </label>
       <input
         id={id}
-        name={id}
+        name={name}
         type={type}
         required={required}
         autoComplete={autoComplete}

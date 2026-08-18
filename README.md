@@ -25,9 +25,7 @@ This repo includes a GitHub Actions workflow that builds a static export and pub
 - User site (`USERNAME.github.io`): `https://USERNAME.github.io`
 - Project site (`my-portfolio`): `https://USERNAME.github.io/my-portfolio`
 
-GitHub Pages cannot run a Node mailer. The contact form therefore uses **FormSubmit** (free, no card, no account). The first submission sends a confirmation email to `razasaeed135@gmail.com` — open that mail and click the link once. After that, new messages arrive in the same inbox.
-
-Optional: create a free [Web3Forms](https://web3forms.com) access key (250 submissions/month) and set `NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY` in GitHub Actions. The form will use that instead.
+GitHub Pages cannot run a Node mailer. The contact form posts to **FormSubmit** (free, no card). The first send opens FormSubmit’s confirmation page / email — confirm `razasaeed135@gmail.com` once. After that, messages arrive in Gmail and the visitor is returned to the site.
 
 ## Deploy on Vercel
 
@@ -47,12 +45,8 @@ Copy `.env.example` to `.env.local` and fill in values:
 
 | Variable | Required | Purpose |
 | --- | --- | --- |
-| `NEXT_PUBLIC_SITE_URL` | Yes in production | Canonical origin for SEO, sitemap and Open Graph (`https://your-domain.com`) |
+| `NEXT_PUBLIC_SITE_URL` | Yes in production | Canonical origin for SEO, sitemap and Open Graph |
 | `NEXT_PUBLIC_GITHUB_URL` | No | GitHub profile URL. Leave empty to hide GitHub links |
-| `NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY` | No | Free [Web3Forms](https://web3forms.com) key. If empty, FormSubmit is used |
-| `RESEND_API_KEY` | No | Only if you later host the `/api/contact` route on Vercel |
-| `CONTACT_FROM_EMAIL` | No | Resend sender, only with Vercel |
-| `CONTACT_TO_EMAIL` | No | Resend inbox. Defaults to `razasaeed135@gmail.com` |
 
 ## Files to add
 
