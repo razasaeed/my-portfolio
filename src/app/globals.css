@@ -1,26 +1,105 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #070b14;
+  --background-raised: #0c1322;
+  --background-card: #10192b;
+  --foreground: #eef3f8;
+  --muted: #93a1b5;
+  --subtle: #6b7a90;
+  --accent: #5eead4;
+  --accent-strong: #2dd4bf;
+  --accent-soft: rgba(94, 234, 212, 0.12);
+  --border: rgba(148, 163, 184, 0.14);
+  --ring: #5eead4;
 }
 
 @theme inline {
   --color-background: var(--background);
+  --color-background-raised: var(--background-raised);
+  --color-background-card: var(--background-card);
   --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-subtle: var(--subtle);
+  --color-accent: var(--accent);
+  --color-accent-strong: var(--accent-strong);
+  --color-accent-soft: var(--accent-soft);
+  --color-border: var(--border);
+  --color-ring: var(--ring);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-instrument-serif);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5.5rem;
+  color-scheme: dark;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), system-ui, sans-serif;
+}
+
+::selection {
+  background: rgba(94, 234, 212, 0.24);
+  color: var(--foreground);
+}
+
+:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 3px;
+}
+
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: 0;
+  z-index: 100;
+  transform: translateY(-120%);
+  border-radius: 0.5rem;
+  background: var(--accent);
+  color: #042f2e;
+  padding: 0.5rem 0.85rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.skip-link:focus {
+  transform: translateY(0.75rem);
+}
+
+.section-shell {
+  padding-block: 4.5rem;
+}
+
+@media (min-width: 768px) {
+  .section-shell {
+    padding-block: 6.5rem;
+  }
+}
+
+.hairline {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(148, 163, 184, 0.28),
+    transparent
+  );
 }

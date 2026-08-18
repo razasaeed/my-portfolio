@@ -1,36 +1,71 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Muhammad Raza Saeed — Personal Site
 
-## Getting Started
+Staff Software Engineer portfolio: experience, expertise, selected work and a contact form. Content lives in `src/data/` so copy can be updated without changing UI components.
 
-First, run the development server:
+## Run locally
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Production build
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build
+npm start
+```
 
-## Learn More
+## Deploy on GitHub Pages
 
-To learn more about Next.js, take a look at the following resources:
+This repo includes a GitHub Actions workflow that builds a static export and publishes it to GitHub Pages on every push to `main`.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- User site (`USERNAME.github.io`): `https://USERNAME.github.io`
+- Project site (`my-portfolio`): `https://USERNAME.github.io/my-portfolio`
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+GitHub Pages cannot run the `/api/contact` server route. The form still validates, then asks visitors to email you directly. For a working Resend inbox, deploy the same repo to Vercel as well.
 
 ## Deploy on Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1. Import the GitHub repository in [Vercel](https://vercel.com/new).
+2. Set the environment variables below.
+3. Deploy.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Or from the CLI:
+
+```bash
+npx vercel
+```
+
+## Environment variables
+
+Copy `.env.example` to `.env.local` and fill in values:
+
+| Variable | Required | Purpose |
+| --- | --- | --- |
+| `NEXT_PUBLIC_SITE_URL` | Yes in production | Canonical origin for SEO, sitemap and Open Graph (`https://your-domain.com`) |
+| `NEXT_PUBLIC_GITHUB_URL` | No | GitHub profile URL. Leave empty to hide GitHub links |
+| `RESEND_API_KEY` | For the contact form | API key from [Resend](https://resend.com) |
+| `CONTACT_FROM_EMAIL` | For the contact form | Verified Resend sender, e.g. `Portfolio <hello@your-domain.com>` |
+| `CONTACT_TO_EMAIL` | Recommended | Inbox for submissions. Defaults to `razasaeed135@gmail.com` |
+
+Until Resend is configured, the form still validates and then asks visitors to email you directly.
+
+## Files to add
+
+| File | Path | Notes |
+| --- | --- | --- |
+| Headshot | `public/profile.jpg` | Until this exists, the hero shows an initials placeholder |
+| Resume | `public/Muhammad_Raza_Saeed_Resume.pdf` | Download Resume already points here |
+
+## Content you can edit later
+
+- `src/data/profile.ts` — name, summary, about, education
+- `src/data/experience.ts` — roles and responsibilities
+- `src/data/projects.ts` — featured work
+- `src/data/skills.ts` — expertise groups
+- `src/data/services.ts` — client services
+- `src/data/philosophy.ts` — working principles and currently exploring
+- `src/data/site.ts` — nav, resume path, GitHub, site URL
