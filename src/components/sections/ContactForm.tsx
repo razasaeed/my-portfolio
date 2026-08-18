@@ -7,6 +7,7 @@ import {
   flattenContactErrors,
   type ContactFieldErrors,
 } from "@/lib/contact";
+import { sendContactMessage } from "@/lib/send-contact";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
 
@@ -61,28 +62,10 @@ export function ContactForm() {
     }
 
     try {
-      const response = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(parsed.data),
-      });
+      const result = await sendContactMessage(parsed.data);
 
-      const data = (await response.json()) as {
-        ok?: boolean;
-        message?: string;
-        errors?: ContactFieldErrors;
-      };
-
-      if (!response.ok) {
-        if (data.errors) {
-          setErrors(data.errors);
-        }
-        setStatus({
-          kind: "error",
-          message:
-            data.message ||
-            `The message could not be sent. Please email ${profile.email} instead.`,
-        });
+      if (!result.ok) {
+        setStatus({ kind: "error", message: result.message });
         return;
       }
 
@@ -90,7 +73,7 @@ export function ContactForm() {
       setErrors({});
       setStatus({
         kind: "success",
-        message: data.message || "Thanks — I’ll get back to you.",
+        message: result.message,
       });
     } catch {
       setStatus({

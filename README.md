@@ -25,7 +25,9 @@ This repo includes a GitHub Actions workflow that builds a static export and pub
 - User site (`USERNAME.github.io`): `https://USERNAME.github.io`
 - Project site (`my-portfolio`): `https://USERNAME.github.io/my-portfolio`
 
-GitHub Pages cannot run the `/api/contact` server route. The form still validates, then asks visitors to email you directly. For a working Resend inbox, deploy the same repo to Vercel as well.
+GitHub Pages cannot run a Node mailer. The contact form therefore uses **FormSubmit** (free, no card, no account). The first submission sends a confirmation email to `razasaeed135@gmail.com` — open that mail and click the link once. After that, new messages arrive in the same inbox.
+
+Optional: create a free [Web3Forms](https://web3forms.com) access key (250 submissions/month) and set `NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY` in GitHub Actions. The form will use that instead.
 
 ## Deploy on Vercel
 
@@ -47,11 +49,10 @@ Copy `.env.example` to `.env.local` and fill in values:
 | --- | --- | --- |
 | `NEXT_PUBLIC_SITE_URL` | Yes in production | Canonical origin for SEO, sitemap and Open Graph (`https://your-domain.com`) |
 | `NEXT_PUBLIC_GITHUB_URL` | No | GitHub profile URL. Leave empty to hide GitHub links |
-| `RESEND_API_KEY` | For the contact form | API key from [Resend](https://resend.com) |
-| `CONTACT_FROM_EMAIL` | For the contact form | Verified Resend sender, e.g. `Portfolio <hello@your-domain.com>` |
-| `CONTACT_TO_EMAIL` | Recommended | Inbox for submissions. Defaults to `razasaeed135@gmail.com` |
-
-Until Resend is configured, the form still validates and then asks visitors to email you directly.
+| `NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY` | No | Free [Web3Forms](https://web3forms.com) key. If empty, FormSubmit is used |
+| `RESEND_API_KEY` | No | Only if you later host the `/api/contact` route on Vercel |
+| `CONTACT_FROM_EMAIL` | No | Resend sender, only with Vercel |
+| `CONTACT_TO_EMAIL` | No | Resend inbox. Defaults to `razasaeed135@gmail.com` |
 
 ## Files to add
 
